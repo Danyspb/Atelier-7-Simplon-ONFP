@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Form;
+
+use App\Entity\Apprenant;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class ApprenantType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('nom')
+            ->add('prenom')
+            ->add('adresse')
+            ->add('telephone')
+            ->add('email')
+            ->add('date_naissance')
+            ->add('lieu_naissance')
+            ->add('sexe')
+            ->add('niveau_etude')
+            ->add('attente')
+            ->add('formations')
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Apprenant::class,
+        ]);
+    }
+}
