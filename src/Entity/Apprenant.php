@@ -3,12 +3,20 @@
 namespace App\Entity;
 
 use App\Repository\ApprenantRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
+ *
  * @ORM\Entity(repositoryClass=ApprenantRepository::class)
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     message="l'email existe deja !!"
+ * )
+ * @UniqueEntity(
+ *     fields={"telephone"},
+ *     message="le numero de telephone existe deja !!"
+ * )
  */
 class Apprenant
 {
@@ -30,11 +38,6 @@ class Apprenant
     private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $adresse;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $telephone;
@@ -42,7 +45,7 @@ class Apprenant
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $email;
+    private $adresse;
 
     /**
      * @ORM\Column(type="date")
@@ -70,14 +73,15 @@ class Apprenant
     private $attente;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Formation::class, mappedBy="appForma")
+     * @ORM\Column(type="string", length=255)
      */
-    private $formations;
+    private $email;
 
-    public function __construct()
-    {
-        $this->formations = new ArrayCollection();
-    }
+    /**
+     * @ORM\ManyToOne(targetEntity=Formation::class, inversedBy="appForma")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $formation;
 
     public function getId(): ?int
     {
@@ -108,18 +112,6 @@ class Apprenant
         return $this;
     }
 
-    public function getAdresse(): ?string
-    {
-        return $this->adresse;
-    }
-
-    public function setAdresse(string $adresse): self
-    {
-        $this->adresse = $adresse;
-
-        return $this;
-    }
-
     public function getTelephone(): ?int
     {
         return $this->telephone;
@@ -132,14 +124,14 @@ class Apprenant
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getAdresse(): ?string
     {
-        return $this->email;
+        return $this->adresse;
     }
 
-    public function setEmail(string $email): self
+    public function setAdresse(string $adresse): self
     {
-        $this->email = $email;
+        $this->adresse = $adresse;
 
         return $this;
     }
@@ -204,29 +196,26 @@ class Apprenant
         return $this;
     }
 
-    /**
-     * @return Collection|Formation[]
-     */
-    public function getFormations(): Collection
+    public function getEmail(): ?string
     {
-        return $this->formations;
+        return $this->email;
     }
 
-    public function addFormation(Formation $formation): self
+    public function setEmail(string $email): self
     {
-        if (!$this->formations->contains($formation)) {
-            $this->formations[] = $formation;
-            $formation->addAppForma($this);
-        }
+        $this->email = $email;
 
         return $this;
     }
 
-    public function removeFormation(Formation $formation): self
+    public function getFormation(): ?Formation
     {
-        if ($this->formations->removeElement($formation)) {
-            $formation->removeAppForma($this);
-        }
+        return $this->formation;
+    }
+
+    public function setFormation(?Formation $formation): self
+    {
+        $this->formation = $formation;
 
         return $this;
     }

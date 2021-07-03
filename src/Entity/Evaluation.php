@@ -20,25 +20,25 @@ class Evaluation
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Formation::class, inversedBy="evaluations")
+     * @ORM\ManyToMany(targetEntity=Formation::class, mappedBy="evaForm")
      */
-    private $resultat;
+    private $formations;
 
     /**
-     * @ORM\OneToMany(targetEntity=Resultat::class, mappedBy="evaResul")
+     * @ORM\OneToMany(targetEntity=Resultat::class, mappedBy="evaluation")
      */
-    private $resultats;
+    private $evaResul;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Categorie::class, inversedBy="evaCate")
+     * @ORM\OneToOne(targetEntity=Categorie::class, inversedBy="evaluation", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $categorie;
+    private $catEva;
 
     public function __construct()
     {
-        $this->resultat = new ArrayCollection();
-        $this->resultats = new ArrayCollection();
+        $this->formations = new ArrayCollection();
+        $this->evaResul = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -49,23 +49,26 @@ class Evaluation
     /**
      * @return Collection|Formation[]
      */
-    public function getResultat(): Collection
+    public function getFormations(): Collection
     {
-        return $this->resultat;
+        return $this->formations;
     }
 
-    public function addResultat(Formation $resultat): self
+    public function addFormation(Formation $formation): self
     {
-        if (!$this->resultat->contains($resultat)) {
-            $this->resultat[] = $resultat;
+        if (!$this->formations->contains($formation)) {
+            $this->formations[] = $formation;
+            $formation->addEvaForm($this);
         }
 
         return $this;
     }
 
-    public function removeResultat(Formation $resultat): self
+    public function removeFormation(Formation $formation): self
     {
-        $this->resultat->removeElement($resultat);
+        if ($this->formations->removeElement($formation)) {
+            $formation->removeEvaForm($this);
+        }
 
         return $this;
     }
@@ -73,19 +76,41 @@ class Evaluation
     /**
      * @return Collection|Resultat[]
      */
-    public function getResultats(): Collection
+    public function getEvaResul(): Collection
     {
-        return $this->resultats;
+        return $this->evaResul;
     }
 
-    public function getCategorie(): ?Categorie
+    public function addEvaResul(Resultat $evaResul): self
     {
-        return $this->categorie;
+        if (!$this->evaResul->contains($evaResul)) {
+            $this->evaResul[] = $evaResul;
+            $evaResul->setEvaluation($this);
+        }
+
+        return $this;
     }
 
-    public function setCategorie(?Categorie $categorie): self
+    public function removeEvaResul(Resultat $evaResul): self
     {
-        $this->categorie = $categorie;
+        if ($this->evaResul->removeElement($evaResul)) {
+            // set the owning side to null (unless already changed)
+            if ($evaResul->getEvaluation() === $this) {
+                $evaResul->setEvaluation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCatEva(): ?Categorie
+    {
+        return $this->catEva;
+    }
+
+    public function setCatEva(Categorie $catEva): self
+    {
+        $this->catEva = $catEva;
 
         return $this;
     }

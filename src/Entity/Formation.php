@@ -25,19 +25,19 @@ class Formation
     private $libelle;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Apprenant::class, inversedBy="formations")
+     * @ORM\OneToMany(targetEntity=Apprenant::class, mappedBy="formation")
      */
     private $appForma;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Evaluation::class, mappedBy="resultat")
+     * @ORM\ManyToMany(targetEntity=Evaluation::class, inversedBy="formations")
      */
-    private $evaluations;
+    private $evaForm;
 
     public function __construct()
     {
         $this->appForma = new ArrayCollection();
-        $this->evaluations = new ArrayCollection();
+        $this->evaForm = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,6 +69,7 @@ class Formation
     {
         if (!$this->appForma->contains($appForma)) {
             $this->appForma[] = $appForma;
+            $appForma->setFormation($this);
         }
 
         return $this;
@@ -76,7 +77,12 @@ class Formation
 
     public function removeAppForma(Apprenant $appForma): self
     {
-        $this->appForma->removeElement($appForma);
+        if ($this->appForma->removeElement($appForma)) {
+            // set the owning side to null (unless already changed)
+            if ($appForma->getFormation() === $this) {
+                $appForma->setFormation(null);
+            }
+        }
 
         return $this;
     }
@@ -84,27 +90,29 @@ class Formation
     /**
      * @return Collection|Evaluation[]
      */
-    public function getEvaluations(): Collection
+    public function getEvaForm(): Collection
     {
-        return $this->evaluations;
+        return $this->evaForm;
     }
 
-    public function addEvaluation(Evaluation $evaluation): self
+    public function addEvaForm(Evaluation $evaForm): self
     {
-        if (!$this->evaluations->contains($evaluation)) {
-            $this->evaluations[] = $evaluation;
-            $evaluation->addResultat($this);
+        if (!$this->evaForm->contains($evaForm)) {
+            $this->evaForm[] = $evaForm;
         }
 
         return $this;
     }
 
-    public function removeEvaluation(Evaluation $evaluation): self
+    public function removeEvaForm(Evaluation $evaForm): self
     {
-        if ($this->evaluations->removeElement($evaluation)) {
-            $evaluation->removeResultat($this);
-        }
+        $this->evaForm->removeElement($evaForm);
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getLibelle();
     }
 }

@@ -14,15 +14,15 @@ class ApprenantType extends AbstractType
         $builder
             ->add('nom')
             ->add('prenom')
-            ->add('adresse')
             ->add('telephone')
-            ->add('email')
+            ->add('adresse')
             ->add('date_naissance')
             ->add('lieu_naissance')
             ->add('sexe')
             ->add('niveau_etude')
             ->add('attente')
-            ->add('formations')
+            ->add('email')
+            ->add('formation')
         ;
     }
 

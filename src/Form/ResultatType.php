@@ -13,7 +13,7 @@ class ResultatType extends AbstractType
     {
         $builder
             ->add('note')
-            ->add('evaResul')
+            ->add('evaluation')
         ;
     }
 

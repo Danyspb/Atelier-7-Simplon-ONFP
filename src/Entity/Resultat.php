@@ -23,10 +23,10 @@ class Resultat
     private $note;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Evaluation::class, inversedBy="resultats")
+     * @ORM\ManyToOne(targetEntity=Evaluation::class, inversedBy="evaResul")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $evaResul;
+    private $evaluation;
 
     public function getId(): ?int
     {
@@ -45,14 +45,14 @@ class Resultat
         return $this;
     }
 
-    public function getEvaResul(): ?Evaluation
+    public function getEvaluation(): ?Evaluation
     {
-        return $this->evaResul;
+        return $this->evaluation;
     }
 
-    public function setEvaResul(?Evaluation $evaResul): self
+    public function setEvaluation(?Evaluation $evaluation): self
     {
-        $this->evaResul = $evaResul;
+        $this->evaluation = $evaluation;
 
         return $this;
     }

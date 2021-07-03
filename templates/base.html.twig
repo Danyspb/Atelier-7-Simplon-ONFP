@@ -23,6 +23,8 @@
             </div>
         </div>
     </nav>
-        {% block body %}{% endblock %}
+        {% block body %}
+            {% form_theme form 'bootstrap_4_layout.html.twig' %}
+        {% endblock %}
     </body>
 </html>

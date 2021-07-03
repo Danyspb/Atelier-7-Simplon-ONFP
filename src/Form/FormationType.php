@@ -13,8 +13,7 @@ class FormationType extends AbstractType
     {
         $builder
             ->add('libelle')
-            ->add('appForma')
-            ->add('evaluations')
+            ->add('evaForm')
         ;
     }
 

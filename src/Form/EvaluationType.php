@@ -12,8 +12,8 @@ class EvaluationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('resultat')
-            ->add('categorie')
+            ->add('formations')
+            ->add('catEva')
         ;
     }
 

@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\CategorieRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,14 +23,9 @@ class Categorie
     private $type;
 
     /**
-     * @ORM\OneToMany(targetEntity=Evaluation::class, mappedBy="categorie")
+     * @ORM\OneToOne(targetEntity=Evaluation::class, mappedBy="catEva", cascade={"persist", "remove"})
      */
-    private $evaCate;
-
-    public function __construct()
-    {
-        $this->evaCate = new ArrayCollection();
-    }
+    private $evaluation;
 
     public function getId(): ?int
     {
@@ -51,32 +44,19 @@ class Categorie
         return $this;
     }
 
-    /**
-     * @return Collection|Evaluation[]
-     */
-    public function getEvaCate(): Collection
+    public function getEvaluation(): ?Evaluation
     {
-        return $this->evaCate;
+        return $this->evaluation;
     }
 
-    public function addEvaCate(Evaluation $evaCate): self
+    public function setEvaluation(Evaluation $evaluation): self
     {
-        if (!$this->evaCate->contains($evaCate)) {
-            $this->evaCate[] = $evaCate;
-            $evaCate->setCategorie($this);
+        // set the owning side of the relation if necessary
+        if ($evaluation->getCatEva() !== $this) {
+            $evaluation->setCatEva($this);
         }
 
-        return $this;
-    }
-
-    public function removeEvaCate(Evaluation $evaCate): self
-    {
-        if ($this->evaCate->removeElement($evaCate)) {
-            // set the owning side to null (unless already changed)
-            if ($evaCate->getCategorie() === $this) {
-                $evaCate->setCategorie(null);
-            }
-        }
+        $this->evaluation = $evaluation;
 
         return $this;
     }
