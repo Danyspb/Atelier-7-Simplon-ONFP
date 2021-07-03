@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>{% block title %}Bienvenue{% endblock %}</title>
 
-        <link rel="stylesheet" href="https://bootswatch.com/3/superhero/bootstrap.min.css">
+        <link rel="stylesheet" href="https://bootswatch.com/5/superhero/bootstrap.min.css">
 
         {% block stylesheets %}
         {% endblock %}
@@ -12,17 +12,17 @@
         {% block javascripts %}
             {#{{ encore_entry_script_tags('app') }}#}
         {% endblock %}
-    </head>
-    <body>
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid" >
-            <div class="navbar-header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
                 <a class="navbar-brand" href="{{ path('acceuil') }}">Acceuil</a>
                 <a class="navbar-brand" href="{{ path('apprenant') }}">Apprenant</a>
                 <a class="navbar-brand" href="{{ path('evaluation') }}">Evaluation</a>
+
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+        </nav>
         {% block body %}
             {% form_theme form 'bootstrap_4_layout.html.twig' %}
         {% endblock %}
