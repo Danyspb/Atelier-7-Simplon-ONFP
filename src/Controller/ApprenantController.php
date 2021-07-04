@@ -64,4 +64,22 @@ class ApprenantController extends AbstractController
     }
     
 
+
+    /**
+     * @Route("/apprenant/delete{id}", name="apprenant_delete")
+     *
+     */
+    public function delete($id,EntityManagerInterface $manager)
+    {
+
+        $appre = $manager->getRepository(Apprenant::class)->find($id);
+        if ($appre != null ){
+            $manager->remove($appre);
+            $manager->flush();
+        }
+        return $this->redirectToRoute('apprenant');
+    }
+
+
+
 }

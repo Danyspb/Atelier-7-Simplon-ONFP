@@ -67,8 +67,9 @@
                     <td>{{ apps.attente}}</td>
                     <td>{{ apps.formation}}</td>
                     <td>
-                        <a href="#" class="btn btn-outline-danger">Supprimer</a>
                         <a href="{{ path('apprenant_edit',{id:apps.id}) }}" class="btn btn-outline-secondary">Modifier</a>
+                        <a href="{{ path('apprenant_delete',{'id': apps.id}) }}" class="btn btn-outline-danger">Supprimer</a>
+
                     </td>
                 </tr>
             {% endfor %}
