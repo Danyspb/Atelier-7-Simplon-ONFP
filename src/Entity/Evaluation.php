@@ -25,20 +25,34 @@ class Evaluation
     private $formations;
 
     /**
-     * @ORM\OneToMany(targetEntity=Resultat::class, mappedBy="evaluation")
-     */
-    private $evaResul;
-
-    /**
      * @ORM\OneToOne(targetEntity=Categorie::class, inversedBy="evaluation", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $catEva;
 
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $date_evaluation;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $note1;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $note2;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $note3;
+
     public function __construct()
     {
         $this->formations = new ArrayCollection();
-        $this->evaResul = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -73,36 +87,6 @@ class Evaluation
         return $this;
     }
 
-    /**
-     * @return Collection|Resultat[]
-     */
-    public function getEvaResul(): Collection
-    {
-        return $this->evaResul;
-    }
-
-    public function addEvaResul(Resultat $evaResul): self
-    {
-        if (!$this->evaResul->contains($evaResul)) {
-            $this->evaResul[] = $evaResul;
-            $evaResul->setEvaluation($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEvaResul(Resultat $evaResul): self
-    {
-        if ($this->evaResul->removeElement($evaResul)) {
-            // set the owning side to null (unless already changed)
-            if ($evaResul->getEvaluation() === $this) {
-                $evaResul->setEvaluation(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getCatEva(): ?Categorie
     {
         return $this->catEva;
@@ -111,6 +95,54 @@ class Evaluation
     public function setCatEva(Categorie $catEva): self
     {
         $this->catEva = $catEva;
+
+        return $this;
+    }
+
+    public function getDateEvaluation(): ?\DateTimeInterface
+    {
+        return $this->date_evaluation;
+    }
+
+    public function setDateEvaluation(\DateTimeInterface $date_evaluation): self
+    {
+        $this->date_evaluation = $date_evaluation;
+
+        return $this;
+    }
+
+    public function getNote1(): ?float
+    {
+        return $this->note1;
+    }
+
+    public function setNote1(?float $note1): self
+    {
+        $this->note1 = $note1;
+
+        return $this;
+    }
+
+    public function getNote2(): ?float
+    {
+        return $this->note2;
+    }
+
+    public function setNote2(?float $note2): self
+    {
+        $this->note2 = $note2;
+
+        return $this;
+    }
+
+    public function getNote3(): ?float
+    {
+        return $this->note3;
+    }
+
+    public function setNote3(?float $note3): self
+    {
+        $this->note3 = $note3;
 
         return $this;
     }

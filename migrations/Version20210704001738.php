@@ -1,0 +1,42 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DoctrineMigrations;
+
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\Migrations\AbstractMigration;
+
+/**
+ * Auto-generated Migration: Please modify to your needs!
+ */
+final class Version20210704001738 extends AbstractMigration
+{
+    public function getDescription(): string
+    {
+        return '';
+    }
+
+    public function up(Schema $schema): void
+    {
+        // this up() migration is auto-generated, please modify it to your needs
+        $this->addSql('CREATE TABLE formation_evaluation (formation_id INT NOT NULL, evaluation_id INT NOT NULL, INDEX IDX_EB8B764C5200282E (formation_id), INDEX IDX_EB8B764C456C5646 (evaluation_id), PRIMARY KEY(formation_id, evaluation_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE resultat (id INT AUTO_INCREMENT NOT NULL, evaluation_id INT NOT NULL, note DOUBLE PRECISION NOT NULL, INDEX IDX_E7DB5DE2456C5646 (evaluation_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('ALTER TABLE formation_evaluation ADD CONSTRAINT FK_EB8B764C5200282E FOREIGN KEY (formation_id) REFERENCES formation (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE formation_evaluation ADD CONSTRAINT FK_EB8B764C456C5646 FOREIGN KEY (evaluation_id) REFERENCES evaluation (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE resultat ADD CONSTRAINT FK_E7DB5DE2456C5646 FOREIGN KEY (evaluation_id) REFERENCES evaluation (id)');
+        $this->addSql('ALTER TABLE evaluation DROP FOREIGN KEY FK_1323A5758926F93B');
+        $this->addSql('DROP INDEX IDX_1323A5758926F93B ON evaluation');
+        $this->addSql('ALTER TABLE evaluation DROP evaform_id, DROP date_evaluation, DROP note1, DROP note2, DROP note3');
+    }
+
+    public function down(Schema $schema): void
+    {
+        // this down() migration is auto-generated, please modify it to your needs
+        $this->addSql('DROP TABLE formation_evaluation');
+        $this->addSql('DROP TABLE resultat');
+        $this->addSql('ALTER TABLE evaluation ADD evaform_id INT DEFAULT NULL, ADD date_evaluation DATE NOT NULL, ADD note1 DOUBLE PRECISION DEFAULT NULL, ADD note2 DOUBLE PRECISION DEFAULT NULL, ADD note3 DOUBLE PRECISION DEFAULT NULL');
+        $this->addSql('ALTER TABLE evaluation ADD CONSTRAINT FK_1323A5758926F93B FOREIGN KEY (evaform_id) REFERENCES formation (id)');
+        $this->addSql('CREATE INDEX IDX_1323A5758926F93B ON evaluation (evaform_id)');
+    }
+}
