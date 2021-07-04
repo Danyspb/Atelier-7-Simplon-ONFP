@@ -45,6 +45,24 @@ class ApprenantController extends AbstractController
             'app' => $appre
         ]);
     }
+     /**
+     * @Route("/edit/{id}}", name="apprenant_edit")
+     */
+    public function edit(Apprenant $apprenant,EntityManagerInterface $em,Request $request){
+        $form=$this -> createForm(ApprenantType::class,$apprenant);
+        $form -> handleRequest($request);
+        if($form -> isSubmitted() && $form -> isValid()){
+            $em -> flush();
+           return  $this -> redirectToRoute('apprenant');
+        }
+        return $this->render('apprenant/edit.html.twig',[
+            'apprenant' => $apprenant,
+            'form'  => $form -> createView()
+        ]);
+
+        
+    }
+    
 
 
     /**
